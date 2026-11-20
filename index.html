@@ -1,0 +1,442 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My AI Chatbot</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #0b1120;
+    color: white;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.app {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+
+.sidebar {
+    width: 260px;
+    background: #111827;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    font-size: 23px;
+    font-weight: bold;
+    color: #38bdf8;
+    margin-bottom: 25px;
+}
+
+.new-chat {
+    padding: 13px;
+    background: #0284c7;
+    border: none;
+    color: white;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.new-chat:hover {
+    background: #0369a1;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+/* Main */
+
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.header {
+    height: 65px;
+    background: #111827;
+    border-bottom: 1px solid #334155;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.header span {
+    color: #38bdf8;
+}
+
+/* Chat */
+
+.chat-box {
+    flex: 1;
+    overflow-y: auto;
+    padding: 25px;
+}
+
+.welcome {
+    text-align: center;
+    margin-top: 100px;
+}
+
+.welcome h1 {
+    font-size: 35px;
+    margin-bottom: 15px;
+}
+
+.welcome p {
+    color: #94a3b8;
+}
+
+.message {
+    display: flex;
+    margin-bottom: 25px;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #0284c7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.message-content {
+    background: #1e293b;
+    padding: 14px 17px;
+    border-radius: 12px;
+    max-width: 80%;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
+
+.user {
+    flex-direction: row-reverse;
+}
+
+.user .avatar {
+    background: #7c3aed;
+}
+
+.user .message-content {
+    background: #164e63;
+}
+
+/* Input */
+
+.input-container {
+    padding: 15px 20px 20px;
+    background: #0b1120;
+}
+
+.input-box {
+    max-width: 850px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    background: #1e293b;
+    border: 1px solid #475569;
+    border-radius: 14px;
+    padding: 8px;
+}
+
+.input-box input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 13px;
+    color: white;
+    font-size: 16px;
+}
+
+.input-box button {
+    background: #0284c7;
+    border: none;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.input-box button:hover {
+    background: #0369a1;
+}
+
+.footer {
+    text-align: center;
+    color: #64748b;
+    font-size: 12px;
+    margin-top: 12px;
+}
+
+.typing {
+    color: #38bdf8;
+    font-size: 14px;
+}
+
+/* Mobile */
+
+@media(max-width: 650px) {
+    .sidebar {
+        display: none;
+    }
+
+    .chat-box {
+        padding: 15px;
+    }
+
+    .welcome {
+        margin-top: 80px;
+    }
+
+    .welcome h1 {
+        font-size: 27px;
+    }
+
+    .message-content {
+        max-width: 85%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">🤖 My AI</div>
+
+        <button class="new-chat" onclick="newChat()">
+            + New Chat
+        </button>
+
+        <div class="sidebar-bottom">
+            My AI Chatbot<br>
+            Version 1.0
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+        <header class="header">
+            <span>🤖 My AI Chatbot</span>
+        </header>
+
+        <!-- Chat Messages -->
+        <div class="chat-box" id="chatBox">
+
+            <div class="welcome" id="welcome">
+                <h1>👋 Hello!</h1>
+                <p>Main tumhara AI assistant hoon.</p>
+                <p>Mujhse kuch bhi pucho!</p>
+            </div>
+
+        </div>
+
+        <!-- Input -->
+        <div class="input-container">
+
+            <div class="input-box">
+
+                <input
+                    type="text"
+                    id="userInput"
+                    placeholder="Message My AI..."
+                    autocomplete="off"
+                >
+
+                <button onclick="sendMessage()">
+                    ➤
+                </button>
+
+            </div>
+
+            <div class="footer">
+                AI can make mistakes. Check important information.
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+
+const chatBox = document.getElementById("chatBox");
+const userInput = document.getElementById("userInput");
+
+let chatHistory = [];
+
+function addMessage(text, sender) {
+
+    const welcome = document.getElementById("welcome");
+
+    if (welcome) {
+        welcome.remove();
+    }
+
+    const message = document.createElement("div");
+    message.className = "message " + sender;
+
+    const avatar = document.createElement("div");
+    avatar.className = "avatar";
+    avatar.textContent = sender === "user" ? "👤" : "🤖";
+
+    const content = document.createElement("div");
+    content.className = "message-content";
+    content.textContent = text;
+
+    message.appendChild(avatar);
+    message.appendChild(content);
+
+    chatBox.appendChild(message);
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    return content;
+}
+
+function showTyping() {
+
+    const typing = addMessage("AI is thinking...", "bot");
+    typing.classList.add("typing");
+
+    return typing;
+}
+
+function getAIResponse(message) {
+
+    const msg = message.toLowerCase();
+
+    if (msg.includes("hello") || msg.includes("hi")) {
+        return "Hello! 😊 Kaise ho? Main tumhara AI assistant hoon.";
+    }
+
+    if (msg.includes("your name") || msg.includes("tumhara naam")) {
+        return "Mera naam My AI Chatbot hai! 🤖";
+    }
+
+    if (msg.includes("how are you") || msg.includes("kaise ho")) {
+        return "Main bilkul theek hoon! Tum kaise ho? 😊";
+    }
+
+    if (msg.includes("who created you")) {
+        return "Mujhe tumne apni website ke liye banaya hai!";
+    }
+
+    if (msg.includes("help") || msg.includes("madad")) {
+        return "Zaroor! Batao tumhe kis cheez mein help chahiye?";
+    }
+
+    if (msg.includes("time")) {
+        return "Abhi ka time: " + new Date().toLocaleTimeString();
+    }
+
+    if (msg.includes("date")) {
+        return "Aaj ki date: " + new Date().toLocaleDateString();
+    }
+
+    if (msg.includes("bye")) {
+        return "Goodbye! 👋 Phir milenge.";
+    }
+
+    return "Tumhara question hai: " + message +
+    "\n\nMain abhi demo mode mein hoon. Real AI answers ke liye API connect karni hogi.";
+}
+
+function sendMessage() {
+
+    const message = userInput.value.trim();
+
+    if (!message) return;
+
+    addMessage(message, "user");
+
+    chatHistory.push({
+        role: "user",
+        content: message
+    });
+
+    userInput.value = "";
+
+    const typing = showTyping();
+
+    setTimeout(() => {
+
+        const reply = getAIResponse(message);
+
+        typing.textContent = reply;
+        typing.classList.remove("typing");
+
+        chatHistory.push({
+            role: "assistant",
+            content: reply
+        });
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+    }, 1000);
+
+}
+
+function newChat() {
+
+    chatBox.innerHTML = `
+        <div class="welcome" id="welcome">
+            <h1>👋 Hello!</h1>
+            <p>Main tumhara AI assistant hoon.</p>
+            <p>Mujhse kuch bhi pucho!</p>
+        </div>
+    `;
+
+    chatHistory = [];
+    userInput.value = "";
+}
+
+userInput.addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+
+});
+
+</script>
+
+</body>
+</html>
