@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My AI Chatbot</title>
+<title>My Groq AI Chatbot</title>
 
 <style>
 * {
@@ -18,7 +18,6 @@ body {
     background: #0b1120;
     color: white;
     height: 100vh;
-    overflow: hidden;
 }
 
 .app {
@@ -26,10 +25,8 @@ body {
     height: 100vh;
 }
 
-/* Sidebar */
-
 .sidebar {
-    width: 260px;
+    width: 250px;
     background: #111827;
     padding: 20px;
     display: flex;
@@ -37,18 +34,18 @@ body {
 }
 
 .logo {
-    font-size: 23px;
-    font-weight: bold;
+    font-size: 24px;
     color: #38bdf8;
+    font-weight: bold;
     margin-bottom: 25px;
 }
 
 .new-chat {
-    padding: 13px;
     background: #0284c7;
-    border: none;
     color: white;
-    border-radius: 9px;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 15px;
 }
@@ -57,13 +54,11 @@ body {
     background: #0369a1;
 }
 
-.sidebar-bottom {
+.sidebar-info {
     margin-top: auto;
     color: #94a3b8;
     font-size: 13px;
 }
-
-/* Main */
 
 .main {
     flex: 1;
@@ -75,19 +70,17 @@ body {
 .header {
     height: 65px;
     background: #111827;
-    border-bottom: 1px solid #334155;
     display: flex;
     align-items: center;
     padding: 0 20px;
-    font-size: 18px;
+    border-bottom: 1px solid #334155;
+    font-size: 19px;
     font-weight: bold;
 }
 
 .header span {
     color: #38bdf8;
 }
-
-/* Chat */
 
 .chat-box {
     flex: 1;
@@ -107,18 +100,19 @@ body {
 
 .welcome p {
     color: #94a3b8;
+    margin: 8px;
 }
 
 .message {
     display: flex;
-    margin-bottom: 25px;
     gap: 12px;
+    margin-bottom: 25px;
     align-items: flex-start;
 }
 
 .avatar {
-    width: 35px;
-    height: 35px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: #0284c7;
     display: flex;
@@ -131,10 +125,10 @@ body {
     background: #1e293b;
     padding: 14px 17px;
     border-radius: 12px;
-    max-width: 80%;
+    max-width: 85%;
     line-height: 1.7;
-    overflow-wrap: anywhere;
     white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
 .user {
@@ -149,18 +143,18 @@ body {
     background: #164e63;
 }
 
-/* Input */
+.typing {
+    color: #38bdf8;
+}
 
 .input-container {
-    padding: 15px 20px 20px;
-    background: #0b1120;
+    padding: 15px 20px;
 }
 
 .input-box {
     max-width: 850px;
     margin: auto;
     display: flex;
-    align-items: center;
     background: #1e293b;
     border: 1px solid #475569;
     border-radius: 14px;
@@ -185,12 +179,13 @@ body {
     width: 45px;
     height: 45px;
     border-radius: 10px;
-    font-size: 20px;
     cursor: pointer;
+    font-size: 20px;
 }
 
-.input-box button:hover {
-    background: #0369a1;
+.input-box button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .footer {
@@ -200,14 +195,7 @@ body {
     margin-top: 12px;
 }
 
-.typing {
-    color: #38bdf8;
-    font-size: 14px;
-}
-
-/* Mobile */
-
-@media(max-width: 650px) {
+@media(max-width:650px) {
     .sidebar {
         display: none;
     }
@@ -216,12 +204,8 @@ body {
         padding: 15px;
     }
 
-    .welcome {
-        margin-top: 80px;
-    }
-
     .welcome h1 {
-        font-size: 27px;
+        font-size: 28px;
     }
 
     .message-content {
@@ -235,7 +219,6 @@ body {
 
 <div class="app">
 
-    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="logo">🤖 My AI</div>
 
@@ -243,31 +226,28 @@ body {
             + New Chat
         </button>
 
-        <div class="sidebar-bottom">
-            My AI Chatbot<br>
+        <div class="sidebar-info">
+            Powered by Groq AI<br>
             Version 1.0
         </div>
     </aside>
 
-    <!-- Main -->
     <main class="main">
 
         <header class="header">
-            <span>🤖 My AI Chatbot</span>
+            <span>🤖 My Groq AI</span>
         </header>
 
-        <!-- Chat Messages -->
         <div class="chat-box" id="chatBox">
 
             <div class="welcome" id="welcome">
                 <h1>👋 Hello!</h1>
-                <p>Main tumhara AI assistant hoon.</p>
-                <p>Mujhse kuch bhi pucho!</p>
+                <p>Welcome to My AI Chatbot</p>
+                <p>Ask me anything you want.</p>
             </div>
 
         </div>
 
-        <!-- Input -->
         <div class="input-container">
 
             <div class="input-box">
@@ -279,14 +259,14 @@ body {
                     autocomplete="off"
                 >
 
-                <button onclick="sendMessage()">
+                <button id="sendBtn" onclick="sendMessage()">
                     ➤
                 </button>
 
             </div>
 
             <div class="footer">
-                AI can make mistakes. Check important information.
+                Powered by Groq API. AI can make mistakes.
             </div>
 
         </div>
@@ -299,10 +279,12 @@ body {
 
 const chatBox = document.getElementById("chatBox");
 const userInput = document.getElementById("userInput");
+const sendBtn = document.getElementById("sendBtn");
 
-let chatHistory = [];
+let messages = [];
+let busy = false;
 
-function addMessage(text, sender) {
+function addMessage(text, role) {
 
     const welcome = document.getElementById("welcome");
 
@@ -310,121 +292,106 @@ function addMessage(text, sender) {
         welcome.remove();
     }
 
-    const message = document.createElement("div");
-    message.className = "message " + sender;
+    const row = document.createElement("div");
+    row.className = "message " + role;
 
     const avatar = document.createElement("div");
     avatar.className = "avatar";
-    avatar.textContent = sender === "user" ? "👤" : "🤖";
+    avatar.textContent = role === "user" ? "👤" : "🤖";
 
     const content = document.createElement("div");
     content.className = "message-content";
     content.textContent = text;
 
-    message.appendChild(avatar);
-    message.appendChild(content);
+    row.appendChild(avatar);
+    row.appendChild(content);
 
-    chatBox.appendChild(message);
+    chatBox.appendChild(row);
 
     chatBox.scrollTop = chatBox.scrollHeight;
 
     return content;
 }
 
-function showTyping() {
+async function sendMessage() {
+
+    const text = userInput.value.trim();
+
+    if (!text || busy) return;
+
+    busy = true;
+    sendBtn.disabled = true;
+
+    userInput.value = "";
+
+    addMessage(text, "user");
+
+    messages.push({
+        role: "user",
+        content: text
+    });
 
     const typing = addMessage("AI is thinking...", "bot");
     typing.classList.add("typing");
 
-    return typing;
-}
+    try {
 
-function getAIResponse(message) {
+        const response = await fetch("/api/chat", {
+            method: "POST",
 
-    const msg = message.toLowerCase();
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-    if (msg.includes("hello") || msg.includes("hi")) {
-        return "Hello! 😊 Kaise ho? Main tumhara AI assistant hoon.";
-    }
-
-    if (msg.includes("your name") || msg.includes("tumhara naam")) {
-        return "Mera naam My AI Chatbot hai! 🤖";
-    }
-
-    if (msg.includes("how are you") || msg.includes("kaise ho")) {
-        return "Main bilkul theek hoon! Tum kaise ho? 😊";
-    }
-
-    if (msg.includes("who created you")) {
-        return "Mujhe tumne apni website ke liye banaya hai!";
-    }
-
-    if (msg.includes("help") || msg.includes("madad")) {
-        return "Zaroor! Batao tumhe kis cheez mein help chahiye?";
-    }
-
-    if (msg.includes("time")) {
-        return "Abhi ka time: " + new Date().toLocaleTimeString();
-    }
-
-    if (msg.includes("date")) {
-        return "Aaj ki date: " + new Date().toLocaleDateString();
-    }
-
-    if (msg.includes("bye")) {
-        return "Goodbye! 👋 Phir milenge.";
-    }
-
-    return "Tumhara question hai: " + message +
-    "\n\nMain abhi demo mode mein hoon. Real AI answers ke liye API connect karni hogi.";
-}
-
-function sendMessage() {
-
-    const message = userInput.value.trim();
-
-    if (!message) return;
-
-    addMessage(message, "user");
-
-    chatHistory.push({
-        role: "user",
-        content: message
-    });
-
-    userInput.value = "";
-
-    const typing = showTyping();
-
-    setTimeout(() => {
-
-        const reply = getAIResponse(message);
-
-        typing.textContent = reply;
-        typing.classList.remove("typing");
-
-        chatHistory.push({
-            role: "assistant",
-            content: reply
+            body: JSON.stringify({
+                messages: messages
+            })
         });
 
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "API error");
+        }
+
+        typing.textContent = data.reply;
+        typing.classList.remove("typing");
+
+        messages.push({
+            role: "assistant",
+            content: data.reply
+        });
+
+    } catch (error) {
+
+        typing.textContent = "Error: " + error.message;
+        typing.classList.remove("typing");
+
+        // Failed request ko history se hata do.
+        messages.pop();
+
+    } finally {
+
+        busy = false;
+        sendBtn.disabled = false;
+        userInput.focus();
+
         chatBox.scrollTop = chatBox.scrollHeight;
-
-    }, 1000);
-
+    }
 }
 
 function newChat() {
 
+    messages = [];
+
     chatBox.innerHTML = `
         <div class="welcome" id="welcome">
             <h1>👋 Hello!</h1>
-            <p>Main tumhara AI assistant hoon.</p>
-            <p>Mujhse kuch bhi pucho!</p>
+            <p>Welcome to My AI Chatbot</p>
+            <p>Ask me anything you want.</p>
         </div>
     `;
 
-    chatHistory = [];
     userInput.value = "";
 }
 
